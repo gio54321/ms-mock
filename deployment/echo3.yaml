@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo3
+  labels:
+    app: echo3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: echo3
+  template:
+    metadata:
+      labels:
+        name: echo3
+    spec:
+      containers:
+        - name: echo3
+          image: gio54321/echo
+          env:
+            - name: ECHO_NAME
+              value: echo3
+            - name: AUTH_ENDPOINT
+              value: http://authserver
+          resources:
+            limits:
+              cpu: 300m
+              memory: 500Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          ports:
+            - containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            capabilities:
+              drop:
+                - all
+              add:
+                - NET_BIND_SERVICE
+            readOnlyRootFilesystem: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo3
+spec:
+  type: ClusterIP
+  selector:
+    name: echo3
+  ports:
+    - port: 80
+      targetPort: 8080

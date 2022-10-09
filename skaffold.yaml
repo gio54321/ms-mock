@@ -1,0 +1,29 @@
+apiVersion: skaffold/v2beta18
+kind: Config
+metadata:
+  name: app
+build:
+  artifacts:
+    - image: gio54321/authserver
+      context: src/authserver
+    - image: gio54321/echo
+      context: src/echo
+    - image: gio54321/gateway
+      context: src/gateway
+  tagPolicy:
+    gitCommit: {}
+  local:
+    useBuildkit: false
+deploy:
+  kubectl:
+    manifests:
+      - ./istio/mTLS.yaml
+      - ./istio/gateway.yaml
+
+      - ./deployment/gateway.yaml
+      - ./deployment/authserver.yaml
+      - ./deployment/echo1.yaml
+      - ./deployment/echo2.yaml
+      - ./deployment/echo3.yaml
+      - ./deployment/echo4.yaml
+      - ./deployment/echo5.yaml

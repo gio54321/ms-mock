@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  title: Users service API
+  description: API specification of the users service that provide authentication and authorization
+  version: 0.1.0
+
+servers:
+  - url: http://auth/
+
+paths:
+  /login:
+    post:
+      summary: Authorize a user
+      description: Return the external API token
+      responses:
+        "200":
+          description: Return the external API token
+          content:
+            text/plain:
+              schema:
+                type: string
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /validate:
+    get:
+      summary: Check if the
+      description: given the external API key, return the internal user claims token
+      security:
+        - externalAPIKey: []
+      responses:
+        "200":
+          description: If the token os valid, return the role of the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: string
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+components:
+  responses:
+    UnauthorizedError:
+      description: User not authorized
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
+
+  securitySchemes:
+    externalAPIKey:
+      type: http
+      scheme: bearer
