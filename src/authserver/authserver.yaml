@@ -23,13 +23,32 @@ paths:
           $ref: "#/components/responses/UnauthorizedError"
   /validate:
     get:
-      summary: Check if the
+      summary: Return user claims token
       description: given the external API key, return the internal user claims token
       security:
         - externalAPIKey: []
       responses:
         "200":
-          description: If the token os valid, return the role of the user
+          description: If the token is valid, return the role of the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: string
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /pubkey:
+    get:
+      summary: Retrieve public JWK of the user claims token
+      description: Retrieve public JWK of the user claims token
+      security:
+        - externalAPIKey: []
+      responses:
+        "200":
+          description: If the token is valid, return the role of the user
           content:
             application/json:
               schema:
