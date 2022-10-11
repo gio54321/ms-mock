@@ -1,6 +1,8 @@
 # ms-mock
 Mock microservices application
 
+![Alt text](architecture.png?raw=true "Application architecture")
+
 ## Istio service mesh installation
 
 Install Istio on the cluster
